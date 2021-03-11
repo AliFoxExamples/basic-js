@@ -5,6 +5,6 @@ module.exports = function createDreamTeam(members) {
 
     return typeof el == 'string'? el.trim(): '';
 
-  }).map(el=>el[0]).sort().join('');
+  }).map(el=>el[0]).sort().join('').toUpperCase();
 
 };
