@@ -4,5 +4,8 @@ const MODERN_ACTIVITY= 15;
 const HALF_LIFE_PERIOD= 5730;
 
 module.exports = function dateSample(sampleActivity) {
-  return typeof sampleActivity == 'string' && Number.isFinite(+sampleActivity)? Math.ceil(Math.log(15/sampleActivity)/(Math.log(2)/5730)): false;
+  if (typeof sampleActivity == 'string' &&  Number.isFinite(+sampleActivity) &&  +sampleActivity !== 0) {
+    return Math.ceil(Math.log(15/sampleActivity)/(Math.log(2)/5730)) <= 0? false: true;
+  }
+  return false;
 };
