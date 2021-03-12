@@ -1,6 +1,9 @@
 const CustomError = require("../extensions/custom-error");
 
 module.exports = function transform(arr) {
+
+  console.log("YEET", arr);
+
   if (Object.prototype.toString.call(arr) !== '[object Array]') {
 
     throw new Error();
