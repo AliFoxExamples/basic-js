@@ -1,56 +1,51 @@
 const CustomError = require("../extensions/custom-error");
 
-module.exports = function transform(arr) {
-
-  throw new CustomError('Not implemented');
+module.exports = function transform(arr,temper) {
 
   if (Object.prototype.toString.call(arr) !== '[object Array]') {
-
     throw new Error();
-
   }
-
-  let target = JSON.parse(JSON.stringify(arr));
+  
+  let target = Array.from(arr);
 
   let sequenes = {
     "--discard-next": function (arr,i) {
-      if (arr[i+1] && (typeof arr[i+1] == 'number')) {
-        return arr.filter((el,k,arr)=>{
-            return !(k==i || k==i+1);
-        })
+      if (i<arr.length-1) {
+        return arr.map((el,k,arr)=> k==i || k==i+1 ? '--discarded': el );
       }
+      
+      return arr.filter((el,k,arr)=> k!=i);
     },
-     "--discard-prev" : function (arr,i){
-      if (arr[i-1] && (typeof arr[i-1] == 'number')) {
-        return arr.filter((el,k,arr)=>{
-            return !(k+1==i || k==i);
-        })
+    "--discard-prev" : function (arr,i){
+      if (i && arr[i-1] != '--discarded') {
+        return arr.map((el,k,arr)=> k==i || i==k+1 ? '--discarded': el );
       }
-     },
-     "--double-next" : function (arr,i){
-      if (arr[i+1] && (typeof arr[i+1] == 'number')) {
-        arr.splice(i,2,arr[i+1]*2);          
-
-        return arr;
+      
+      return arr.filter((el,k,arr)=> k!=i);
+      
+    },
+    "--double-next" : function (arr,i){
+      if (i<arr.length-1) {
+        return arr.map((el,k,arr)=>k==i?arr[k+1]:arr[k]);
       }
-     },
-     "--double-prev" : function (arr,i){
-      if (arr[i-1] && (typeof arr[i-1] == 'number')) {
-        
-        arr.splice(i-1,2,arr[i-1]*2);          
 
-        return arr;
+      return arr.filter((el,k,arr)=> k!=i);
+    },
+    "--double-prev" : function (arr,i){
+      if (i && arr[i-1] != '--discarded') {
+        return arr.map((el,k,arr)=>k==i?arr[k-1]:arr[k]);
       }
-     }
-  }
-  
 
-  for (let i = 0; i < target.length; i++) {
-    if( target[i] in sequenes) {
-        target = sequenes[target[i]](target, i);
-        i = 0;
+      return arr.filter((el,k,arr)=> k!=i);
     }
   }
 
-  return target;
+  for (let i = 0; i < target.length; i++) {
+    if( target[i] in sequenes) {
+      target = sequenes[target[i]](target, i);
+      i = 0;
+    }
+  }
+
+  return target.filter(el=>el!=='--discarded');
 };
