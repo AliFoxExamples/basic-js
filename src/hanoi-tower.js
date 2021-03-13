@@ -1,53 +1,14 @@
 const CustomError = require("../extensions/custom-error");
 
-module.exports = function calculateHanoi (disksNumber, turnsSpeed) {
-
-  throw new CustomError('Not implemented');
-
-//   let arr = [[],[],[]];
-
-//   for (let i = disksNumber; i > 0; i--) {
-
-
-//      arr[0].push(i);
-
-//   }
-
-// //     return arr;
-
+module.exports = function calculateHanoi(disksNumber, turnsSpeed) {
   
-//   let turns = 0;
+  function main (n) {
+    return n < 2? (2**(n-1)): (2**(n-1))+main(n-1);
+  }
 
-//   for (let i = 0; ;){
+  let turns = main(disksNumber);
 
-//       if ( arr[i][arr[i].length-1] >  arr[i+1][arr[i+1].length-1] ) {
+  let seconds =  Math.floor(turns/(turnsSpeed/3600))
 
-//           i++;
-
-//       }
-
-//       else {
-
-//           arr[i+1].push(arr[i].pop());
-//           turns++;
-
-//       }
-  
-//   }
-
-
-
-
-
-  
+  return {turns, seconds}
 }
-
-
-
-// function calculateHanoi(disksNumber, turnsSpeed) {
-//   let turns = ((disksNumber-1)**3)-1;
-
-//   let seconds =  Math.floor(turns/(turnsSpeed/3600))
-
-//   return {turns, seconds}
-// }
